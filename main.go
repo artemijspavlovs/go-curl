@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/alexflint/go-arg"
 	"io"
-	"log"
 	"net/http"
 	"regexp"
 	"sort"
@@ -48,11 +47,7 @@ func handleRequestsConcurrently(url string, c chan<- WebsiteResponse) {
 		if !rHttpUrl.MatchString(url) {
 			url = "https://" + url
 		}
-		responseSize, err := handleRequest(url)
-
-		if err != nil {
-			log.Fatalf("Error handling request: %v", err)
-		}
+		responseSize := handleRequest(url)
 
 		c <- WebsiteResponse{
 			URL:          url,
@@ -71,22 +66,19 @@ func sortResponses(rl []WebsiteResponse) {
 	sort.Slice(rl, func(i, j int) bool { return rl[i].ResponseSize > rl[j].ResponseSize })
 }
 
-func handleRequest(url string) (int64, error) {
+func handleRequest(url string) int64 {
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Fatal(err)
+		return 0
 	}
-	b, err := getResponseBodySize(resp)
-	if err != nil {
-		return 0, err
-	}
-	return b, nil
+	b := getResponseBodySize(resp)
+	return b
 }
 
-func getResponseBodySize(resp *http.Response) (int64, error) {
+func getResponseBodySize(resp *http.Response) int64 {
 	b, err := io.Copy(io.Discard, resp.Body)
 	if err != nil {
-		return 0, err
+		return 0
 	}
-	return b, nil
+	return b
 }
