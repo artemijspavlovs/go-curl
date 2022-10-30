@@ -20,3 +20,9 @@
 
 2. add tests
 
+### Manual tests
+
+```shell
+./go-curl --urls hello.com blah http://artpav.dev google.com
+./go-curl --urls youtube.com https://wodo.dev/ https://example.com 1
+```
