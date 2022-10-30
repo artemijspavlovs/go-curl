@@ -14,6 +14,9 @@
 **Programming Language:** go (only)
 
 ### Improvements
-make the output look better:
+1. make the output look better:
 - [go-pretty](https://github.com/jedib0t/go-pretty)
 - [table](https://github.com/rodaine/table)
+
+2. add tests
+
